@@ -1,40 +1,33 @@
-# SPDX-FileCopyrightText: © 2024 Tiny Tapeout
-# SPDX-License-Identifier: Apache-2.0
+#=========================================================
+# Author   : Emrys Leowhel Oling
+# Date     : 2025-09-07
+# Design   : Cocotb ADD-only testbench for 4-bit ALU wrapper
+# License  : MIT
+# DUT      : tt_um_wrapper
+# Mapping  : ui_in[3:0]=A, ui_in[7:4]=B, uio_in[3:0]=ALU_Sel
+#            uo_out[7]=C, [6]=Z, [5]=N, [4]=O, [3:0]=ALU_Out
+#=========================================================
 
 import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles
+from cocotb.triggers import Timer
+import random
 
+ADD_SEL = 0b0000  # opcode for ADD
 
-@cocotb.test()
-async def test_project(dut):
-    dut._log.info("Start")
+def add4(a: int, b: int):
+    a &= 0xF
+    b &= 0xF
+    full = a + b            # up to 5 bits
+    res  = full & 0xF
+    carry = (full >> 4) & 1
 
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
-    cocotb.start_soon(clock.start())
+    # Flags
+    zero = 1 if res == 0 else 0
+    negative = (res >> 3) & 1
 
-    # Reset
-    dut._log.info("Reset")
-    dut.ena.value = 1
-    dut.ui_in.value = 0
-    dut.uio_in.value = 0
-    dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
-    dut.rst_n.value = 1
+    # Signed overflow (two's complement)
+    # overflow = (~(a ^ b) & (a ^ res)) MSB
+    overflow = ((~(a ^ b) & (a ^ res)) >> 3) & 1
 
-    dut._log.info("Test project behavior")
+    return res, carry, zero, negative, overflow
 
-    # Set the input values you want to test
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
-
-    # Wait for one clock cycle to see the output values
-    await ClockCycles(dut.clk, 1)
-
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
-
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
