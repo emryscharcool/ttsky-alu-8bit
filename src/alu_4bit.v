@@ -19,8 +19,8 @@ module alu_4bit (
     output reg Overflow     
 );
 
-    reg [4:0] tmp; // for intermediate result with carry
-
+    reg [4:0] tmp;
+    
     always @(*) begin
         // defaults
         ALU_Out  = 4'h0;
