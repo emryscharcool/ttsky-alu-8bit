@@ -48,7 +48,7 @@ assign uo_out[7] = Carry;
 
 
   // Replace tt_um_example with your module name:
-  ttsky25a_alu_4bit_wrapper user_project (
+  tt_um_alu_4bit_wrapper user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST

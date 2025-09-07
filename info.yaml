@@ -17,7 +17,7 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "ttsky25a_alu_4bit_wrapper.v"
+    - "tt_um_alu_4bit_wrapper.v"
     - "alu_4bit.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.

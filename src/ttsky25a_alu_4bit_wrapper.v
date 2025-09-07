@@ -8,7 +8,7 @@
 `default_nettype none
 `timescale 1ns/1ns
 
-module ttsky25a_alu_4bit_wrapper (
+module tt_um_alu_4bit_wrapper (
     input  wire [7:0] ui_in,    // [3:0] = A, [7:4] = B
     output wire [7:0] uo_out,   // {Flags[3:0], ALU_Out[3:0]}
     input  wire [7:0] uio_in,   // [3:0] = ALU_Sel
