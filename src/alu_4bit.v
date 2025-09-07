@@ -3,17 +3,17 @@
 // Date     : 2025-09-07
 // Design   : 4-bit ALU with Flags
 // Purpose  : For TTsky25a ALU (Tiny Tapeout project)
-// License  : MIT
+// License  : APACHE-2.0
 //=========================================================
 
 `default_nettype none
 `timescale 1ns/1ns
 
 module alu_4bit (
-    input  [3:0] A,         // First operand
-    input  [3:0] B,         // Second operand
-    input  [3:0] ALU_Sel,   // Operation select
-    output reg [3:0] ALU_Out, // ALU result
+    input  [3:0] A,          // First operand
+    input  [3:0] B,          // Second operand
+    input  [3:0] ALU_Sel,    // Operation select
+    output reg [3:0] ALU_Out,// ALU result
 
     // Status flags
     output reg Carry,       
@@ -25,9 +25,11 @@ module alu_4bit (
     reg [4:0] tmp;
     
     always @(*) begin
-        // defaults
+        // default values to avoid latches
         ALU_Out  = 4'h0;
         Carry    = 1'b0;
+        Zero     = 1'b0;
+        Negative = 1'b0;
         Overflow = 1'b0;
 
         case (ALU_Sel)
@@ -60,12 +62,12 @@ module alu_4bit (
             4'b0111: ALU_Out = {A[0], A[3:1]}; // Rotate right
 
             // Logical ops
-            4'b1000: ALU_Out = A & B;   // AND
-            4'b1001: ALU_Out = A | B;   // OR
-            4'b1010: ALU_Out = A ^ B;   // XOR
-            4'b1011: ALU_Out = ~(A | B);// NOR
-            4'b1100: ALU_Out = ~(A & B);// NAND
-            4'b1101: ALU_Out = ~(A ^ B);// XNOR
+            4'b1000: ALU_Out = A & B;    // AND
+            4'b1001: ALU_Out = A | B;    // OR
+            4'b1010: ALU_Out = A ^ B;    // XOR
+            4'b1011: ALU_Out = ~(A | B); // NOR
+            4'b1100: ALU_Out = ~(A & B); // NAND
+            4'b1101: ALU_Out = ~(A ^ B); // XNOR
 
             // Comparison ops
             4'b1110: ALU_Out = (A > B)  ? 4'd1 : 4'd0; 
