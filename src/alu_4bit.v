@@ -6,6 +6,9 @@
 // License  : MIT
 //=========================================================
 
+`default_nettype none
+`timescale 1ns/1ns
+
 module alu_4bit (
     input  [3:0] A,         // First operand
     input  [3:0] B,         // Second operand
